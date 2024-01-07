@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="utf8mb4" collation="utf8mb4_general_ci">dbperpustakaan</database>
+</source>
+<canvas zoom="80">
+<tables>
+<table name="tblbuku" view="colnames">
+<left>21</left>
+<top>29</top>
+<width>91</width>
+<height>171</height>
+<sql_create_table>CREATE TABLE `tblbuku` (
+  `idBuku` int(11) NOT NULL AUTO_INCREMENT,
+  `judulBuku` varchar(255) NOT NULL,
+  `pengarang` varchar(255) NOT NULL,
+  `penerbit` varchar(255) NOT NULL,
+  `tahunTerbit` char(4) NOT NULL,
+  `jmlHalaman` int(5) NOT NULL,
+  `stokBuku` int(4) NOT NULL,
+  `statusAktif` enum('1','0') NOT NULL,
+  PRIMARY KEY (`idBuku`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci</sql_create_table>
+</table>
+<table name="tblkaryawan" view="colnames">
+<left>19</left>
+<top>233</top>
+<width>108</width>
+<height>103</height>
+<sql_create_table>CREATE TABLE `tblkaryawan` (
+  `idKaryawan` int(11) NOT NULL AUTO_INCREMENT,
+  `namaKaryawan` varchar(255) NOT NULL,
+  `statusAktif` enum('1','0') NOT NULL,
+  PRIMARY KEY (`idKaryawan`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci</sql_create_table>
+</table>
+<table name="tblpeminjam" view="colnames">
+<left>412</left>
+<top>237</top>
+<width>108</width>
+<height>118</height>
+<sql_create_table>CREATE TABLE `tblpeminjam` (
+  `idPeminjam` int(11) NOT NULL AUTO_INCREMENT,
+  `namaPeminjam` varchar(255) NOT NULL,
+  `levelPeminjam` enum('dosen','mahasiswa') NOT NULL,
+  `statusAktif` enum('1','0') NOT NULL,
+  PRIMARY KEY (`idPeminjam`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci</sql_create_table>
+</table>
+<table name="tblpeminjaman" view="colnames">
+<left>196</left>
+<top>29</top>
+<width>108</width>
+<height>144</height>
+<sql_create_table>CREATE TABLE `tblpeminjaman` (
+  `idPeminjaman` int(11) NOT NULL AUTO_INCREMENT,
+  `idBuku` int(11) NOT NULL,
+  `idPeminjam` int(11) NOT NULL,
+  `idKaryawan` int(11) NOT NULL,
+  `jmlPeminjaman` int(2) NOT NULL,
+  `statusAktif` enum('1','0') NOT NULL,
+  PRIMARY KEY (`idPeminjaman`),
+  KEY `ambilIDBukuPeminjaman` (`idBuku`),
+  KEY `ambilIDPeminjaman` (`idPeminjam`),
+  KEY `ambilIDKaryawan` (`idKaryawan`),
+  CONSTRAINT `ambilIDBukuPeminjaman` FOREIGN KEY (`idBuku`) REFERENCES `tblbuku` (`idBuku`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `ambilIDKaryawan` FOREIGN KEY (`idKaryawan`) REFERENCES `tblkaryawan` (`idKaryawan`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `ambilIDPeminjaman` FOREIGN KEY (`idPeminjam`) REFERENCES `tblpeminjam` (`idPeminjam`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci</sql_create_table>
+</table>
+<table name="tblpengembalian" view="colnames">
+<left>409</left>
+<top>80</top>
+<width>115</width>
+<height>130</height>
+<sql_create_table>CREATE TABLE `tblpengembalian` (
+  `idPengembalian` int(11) NOT NULL AUTO_INCREMENT,
+  `idPeminjaman` int(11) NOT NULL,
+  `idKaryawan` int(11) NOT NULL,
+  `jmlPengembalian` int(2) NOT NULL,
+  `statusAktif` enum('1','0') NOT NULL,
+  PRIMARY KEY (`idPengembalian`),
+  KEY `ambilIDPeminjamanuntukPengembalian` (`idPeminjaman`),
+  KEY `ambilIDKaryawanPengembalian` (`idKaryawan`),
+  CONSTRAINT `ambilIDKaryawanPengembalian` FOREIGN KEY (`idKaryawan`) REFERENCES `tblkaryawan` (`idKaryawan`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `ambilIDPeminjamanuntukPengembalian` FOREIGN KEY (`idPeminjaman`) REFERENCES `tblpeminjaman` (`idPeminjaman`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
